@@ -8,4 +8,4 @@ TODO: add detail description here
 TODO: add dataset description here
 
 # Solution
-
+TODO: use logistic regression to implement baseline, without using text data; use more advanced model to embed data
