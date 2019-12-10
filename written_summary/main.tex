@@ -39,7 +39,6 @@
 % on the second line, try using \AND instead of \And before the third
 % author name.
 
-%TODO: turn off anonymous mode
 
 \author{
   Lichen Zhang (lichenz)\\
@@ -80,8 +79,8 @@ Our goal essentially consists of two tasks: the first one is to train a model th
 \section{Background and related works}
 
 \subsection{$L_1$ Regularization}
-Regularization is an old but useful idea. The intuition behind is to do model
-selection by restricting the parameter of models being too large. There are
+The intuition behind regularization is to do model
+selection by restricting the parameter of models from being too large. There are
 many types of regularization, the most popular family is the $\ell_p$ norm 
 regularization family. In this work, $L_1$ regularization has been applied,
 which guarantees a better convergence rate than $L_2$ regularization or
@@ -99,28 +98,6 @@ There are two steps in the BERT framework: pre-training and fine-tuning. In the 
 
 \subsection{GloVe}
 Glove is a pre-trained vector space representations of words combining the advantages of both global matrix factorization and local context window methods. The representation model is trained only on the nonzero elements in a word-word covariance matrix, which leads to a high performance on word analogy tasks. It also provides an accurate prediction on word similarity tests. (Jeffrey Pennington, et al. 2014)\cite{4}.
-
-\section{Methods}
-We adapt slightly different methods for the two tasks: feature significance analysis and predictor model training. However, BERT is involved in both tasks as we try to improve on the baseline approach. \\
-
-\begin{figure}
-\begin{center}
-\includegraphics[scale=0.5]{approach_outline}
-\caption{Approach Outline}
-\end{center}
-
-\end{figure}
-
-
-
-
-
-
-\subsection{Feature Significance Analysis}
-Our baseline model is a linear regression with numerical features, which is everything except the comment text of the review data. The way we perform feature selection is via $L_1$ regularization. We expect the weight of insignificant features to shrink to 0 by $L_1$ regularization. Therefore, we can sort weights based on their norms, to get a ranking of features. To improve on that, we use BERT to generate a word-embedding for sentences. Then combining with numerical features we have used before, we train a final linear layer using this embedding with $L_1$ regularization.
-
-\subsection{Score Predictor}
-Baseline model is a simple logistic regression using again numerical features, and our final model is a fine-tuned BERT. More specifically, we first load the pre-trained BERT model, then add up a final linear classification layer, this final layer is what have trained for. We have strong confidence in this learning framework, since in the original paper of BERT, authors achieve very high accuracy using this fine-tuned strategy.
 
 \section{Dataset}
 %TODO: how to cite this / Do we want to mention this at all?
@@ -159,15 +136,34 @@ Each of our input data contains a variety of features:
 
 We partitioned the features into two classes - we call all the features besides the Text "numerical features" as they could be represented by numbers or discrete classes. For those features that are not represented by numbers, such as Category, we pre-process the data by assigning a number to each category and mapping the features to their numerical representations. In our baseline approach, we only used the numerical features to train the models. When we incorporated the text into the feature, we experimented with two pre-processing methods: using GloVe to represent each word in the text, and using BERT to generate an embedded model of the text. 
 
+\section{Methods}
+We adapt slightly different methods for the two tasks: feature significance analysis and predictor model training. However, a similar outline is adapted by both tasks as shown in figure 1 above: in the baseline model, we use only numerical features to perform a linear or logistic regression with $L_1$ regularization. To improve the performance, we introduce more advanced language processing models such as BERT and LSTM to perform text analysis. \\
+
+\begin{figure}
+\label{fig1}
+\begin{center}
+\includegraphics[scale=0.5]{approach_outline}
+\caption{Method Outline}
+\end{center}
+
+\end{figure}
+
+
+\subsection{Feature Significance Analysis}
+Our baseline model is a linear regression with numerical features, which is everything except the comment text of the review data. The way we perform feature selection is via $L_1$ regularization. We expect the weight of insignificant features to shrink to 0 by $L_1$ regularization. Therefore, we can sort weights based on their norms, to get a ranking of features. To improve on that, we use BERT to generate a word-embedding for sentences. Then combining with numerical features we have used before, we train a final linear layer using this embedding with $L_1$ regularization.
+
+\subsection{Score Predictor}
+The baseline model is a simple logistic regression using again only the numerical features, and our final model is a fine-tuned BERT with the texts. More specifically, we first load the pre-trained BERT model, then adding up a final linear classification layer as the training target. We have strong confidence in this learning framework, since in the original publications of BERT, the developers achieved very high accuracy using this task-specific fine-tuning strategy.
+
+
+
 \section{Experiments and Results}
-Due to time constraint, we didn't finish the LSTM model with GloVe 
-embedding, so the below discussions will focus on baseline models and 
-BERT.
+
 \subsection{Feature Analysis}
 \subsubsection{Baseline: $L_1$ regularization}
-Since BERT is a strong and robust pre-trained model, we won’t add a lot more complexity to our final model, as using a simpler model would drastically increase the interpretability of the results. Thus, we propose using linear model for ease of interpretation. For feature selection, we use linear regression with $L_1$ regularization, this combines training together with feature selection.  Intuitively, $L_1$ regularization will pull the weights of useless features to 0, therefore, we can select features based on the weights of their norms.\cite{1} \\
+Since BERT is a strong and robust pre-trained model, we won’t add a lot more complexity to our final model, as using a simpler model would drastically increase the interpretability of the results. Thus, we propose using linear model for ease of interpretation. For feature selection, we use linear regression with $L_1$ regularization, this combines training together with feature selection, using only the numerical features. Intuitively, $L_1$ regularization will pull the weights of useless features to 0, therefore, we can select features based on the weights of their norms.\cite{1} \\
 
-Our baseline for this problem is a simple linear regression with $L_1$ regularization, using only numerical features. This model achieves a 1.77 mean squared error on test dataset. We then use only top 10 features ranked by the norm of weights, this gives a 1.81 test loss.
+This model achieves a 1.77 mean squared error on test dataset. We then use only top 10 features ranked by the norm of weights, this gives a 1.81 test loss.
 
 \subsubsection{Using Pre-trained BERT Model}
  We feed review text into pre-trained BERT and use its last hidden states as our representation of text. Using purely BERT processed text, we get loss down to 1.42. Combining features in baseline and BERT, we finally get shrink loss to 1.35, which beats all our previous models. We validate the effectiveness by selecting top 100 features, and this model gives a loss of 1.41. See \ref{fig2} for more details.
@@ -186,14 +182,14 @@ Our baseline for this problem is a simple linear regression with $L_1$ regulariz
 \caption{Top 10 features selected by baseline}
 \end{center}
 \end{figure}
-It is worth noting that \texttt{nchar} and \texttt{nword} are ranked highest by
+In the top 10 features selected from our baseline model shown in figure 3 (\ref{fig2}), it is worth noting that \texttt{nchar} and \texttt{nword} are ranked highest by
 their weights, which is in contrast of what we have thought about. We 
 expect words that indicate strong positive or negative sentiment to have
-higher weights, which is not the case in the baseline model. \\
+higher weights, which is not the case in this model. \\
 
 When using BERT, we expect the expressiveness of BERT will give a good
 representation of words and sentences, therefore, some features in that
-have high rank in baseline will be ``washed out''. See \ref{fig4} for a 
+have high rank in baseline will be ``washed out''. See figure 4(\ref{fig4}) for a 
 comparison.
 \begin{figure}
 \begin{center}
@@ -203,31 +199,30 @@ comparison.
 \end{center}
 \end{figure}
 The first observation is the norm of weights have decreased drastically. This
-reflects our expectation, since BERT is more expressive than these numerical
+meets our expectation, since BERT is more expressive than these numerical
 features, the contribution of numerical features have been significantly 
 reduced. In our final BERT model, we have $768+35=803$ features, among
 the top 100 features, only 1 numerical feature appears, namely, the 
 occurrence of word \texttt{amazing}. On the other hand, for the top 200
 features, 33 numerical features have appeared, which means we haven't
-completely washed them out via BERT embedding. 
+washed them out entirely via BERT embedding. 
 \subsection{Predicting Scores}
-\subsubsection{Baseline: Logistic regression}
+\subsubsection{Baseline: Logistic regression with Cross-Validation}
 In score-predicting task, our baseline model consists of a simple logistic 
-regression using only numerical features. Main advantage of this simple
-model is, training is lightning fast, therefore, we can perform more 
+regression using only numerical features. Since linear regression is not computationally expensive, we can perform more 
 comprehensive and sophisticated model selection by cross-validation, which
-is intrinsically hard for deep and complex models. With 10-fold 
-cross-validation, we get an accuracy around 40\%.
+is intrinsically hard for more complex models. With a 10-fold 
+cross-validation, we get an accuracy of around 40\%.
 
 \subsubsection{Fine-tuning Pre-trained BERT model}
 We adapt the strategy described in \cite{2}, by adding an extra linear layer
-to the pre-trained BERT model, and final training mainly involves training the
-parameters of last layer. Error still got propagated back to the entire model,
-but major learning happens only in the last layer, so fine-tuning process is
+to the pre-trained BERT model, and train the
+parameters of last layer. Errors are still getting propagated back to the entire model,
+but most of the weight and coefficient tuning happens only in the last layer, so fine-tuning process is
 much faster than training the entire model. In our experiment, it takes around
 50 minutes to train an epoch of our dataset, which compromised of around
-30000 sentences. Final accuracy of this model is around 62\%. We refer 
-readers to \ref{fig5} for figures.
+30000 sentences. Our final accuracy of this model is around 62\%. We refer 
+readers to Figure 5(\ref{fig5}) for figures.
 \begin{figure}
 \label{fig5}
 \begin{center}
@@ -241,36 +236,27 @@ As the state-of-the-art natural language understanding model, BERT
 outperforms baseline model to a significant extent. However, it is worth 
 noting that such accuracy has not yet achieved the performance of BERT on
 other sentiment analysis task. For example, in Netflix review prediction, 
-BERT achieves an accuracy over 95\%. One phenomenon we have observed
-is, BERT generally performs well when output is binary, i.e., in task like 
+BERT achieves an accuracy over 95\%. We observed that BERT generally performs well when output is binary, i.e., in task like 
 classifying whether a review is positive or not. Additionally, we measure the
 accuracy by using a 0-1 loss, i.e., if prediction matches output label, we give
 a 1, otherwise 0. Due to the structure of this specific task, it might be 
-better to use more sensitive measurement of loss.
+better to use more sensitive measurement of loss.\\
+
+We also experimented on a different approach for text processing with GloVe\cite{4} and LSTM, which stands for Long Short-term Memory and is essentially a variance of vanilla RNN. However, since GloVe performs transformation on word level, we realized that we do not have a good model to combine the vectors of the words and represent the whole text. Otherwise, we would have to train on an input dimension that is too large to be reasonable. 
 
 \section{Conclusion and Future Work}
 \subsection{Conclusion}
 
-%TODO: Review this paragraph
-Sentiment analysis and further classification and prediction is a non-trivial task. One key component is how to feature engineer the text into features, in order to address this problem, we make use of the state of the art natural language understanding model, BERT, which generates an embedding for sentence. This pre-trained fine-tuned model proves to be useful for both tasks ---- in sentiment score regression problem, it reduces 30\% loss compared to baseline model. For classifying star ratings, it improves 50\% accuracy compared to baseline. Also, $L_1$ regularization proves to be a useful feature selection tool. \\
+Sentiment analysis and further classification and prediction is a non-trivial task. The key challenge to feature engineer the text into features. To address this problem, we make use of the state-of-the-art natural language understanding model, BERT, which generates an embedding for sentence. This pre-trained fine-tuned model proves to be useful for both tasks. In sentiment score regression problem, it reduces 30\% loss compared to baseline model. For classifying star ratings, it improves 50\% accuracy compared to baseline. Meanwhile, $L_1$ regularization proves to be a useful feature selection tool. \\
 
 \subsection{Reflections and Future Work}
-One might notice that, even though we are able to achieve a significant improvement over the baseline approach, a final testing accuracy of 62\% is still far from optimal. One possible reason is labels of data are very imbalanced: one third of them are 4, one third of them are 5, and only one third are 1,2 and 3. We haven’t found a way to address this problem. One possibility is to augment the labels using some generative way: for example, interpolate the data points, then using KNN to generate some similar data. The other is switch to some more advanced generative model, such as the SMOTE algorithm\cite{5}. 
+One might notice that, even though we are able to achieve a significant improvement over the baseline approach, a final testing accuracy of 62\% is still far from optimal. One possible reason is labels of data are very imbalanced: one third of them are 4, one third of them are 5, and only one third are 1,2 and 3. We haven’t found a way to address this problem. One possibility is to augment the labels using some generative way: for example, interpolate the data points, then using KNN to generate some similar data. The other idea is to switch to a more advanced generative model, such as the SMOTE algorithm\cite{5}. 
  We believe that these pre-processing methods will be able to increase the testing performance. \\
 
 Another issue that we are yet to address is the problem of combining BERT with all the numerical features. We reason that padding a dense layer right before the output layer might be a feasible approach. However, if we simply join the embedded word representations of the text from BERT to the other numeric features in such a linear setting, there might not be a significant difference between this method and our feature analysis model. We might also propagate error back to BERT pre-trained weights. Due to time constraint (training one epoch of BERT takes more than 50 minutes), we don’t have a clear answer to this question. \\
 
 
 
-
-
-% I left this part intentionally for reference
-
-
-
-
-
-%TODO: add references
 \bibliographystyle{unsrt}
 \bibliography{ref}
 
