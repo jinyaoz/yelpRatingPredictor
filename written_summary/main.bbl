@@ -1,0 +1,33 @@
+\begin{thebibliography}{1}
+
+\bibitem{3}
+Tomas Mikolov, Kai Chen, Greg Corrado, and Jeffrey Dean.
+\newblock Efficient estimation of word representations in vector space.
+\newblock {\em CoRR}, abs/1301.3781, 2013.
+
+\bibitem{4}
+Jeffrey Pennington, Richard Socher, and Christopher Manning.
+\newblock {G}love: Global vectors for word representation.
+\newblock In {\em Proceedings of the 2014 Conference on Empirical Methods in
+  Natural Language Processing ({EMNLP})}, pages 1532--1543, Doha, Qatar,
+  October 2014. Association for Computational Linguistics.
+
+\bibitem{2}
+Jacob {Devlin}, Ming-Wei {Chang}, Kenton {Lee}, and Kristina {Toutanova}.
+\newblock {BERT: Pre-training of Deep Bidirectional Transformers for Language
+  Understanding}.
+\newblock {\em arXiv e-prints}, page arXiv:1810.04805, Oct 2018.
+
+\bibitem{1}
+Andrew~Y. Ng.
+\newblock Feature selection, l1 vs. l2 regularization, and rotational
+  invariance.
+\newblock In {\em Proceedings of the Twenty-first International Conference on
+  Machine Learning}, ICML '04, pages 78--, New York, NY, USA, 2004. ACM.
+
+\bibitem{5}
+Kevin~W. Bowyer, Nitesh~V. Chawla, Lawrence~O. Hall, and W.~Philip Kegelmeyer.
+\newblock {SMOTE:} synthetic minority over-sampling technique.
+\newblock {\em CoRR}, abs/1106.1813, 2011.
+
+\end{thebibliography}
