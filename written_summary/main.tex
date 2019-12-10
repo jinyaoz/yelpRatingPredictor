@@ -92,7 +92,7 @@ Glove is a pre-trained vector space representations of words combining the advan
 \section{Methods}
 We adapt slightly different methods for the two tasks: feature significance analysis and predictor model training. However, BERT is involved in both tasks as we try to improve on the baseline approach. \\
 
-% TODO: include our methods outline here(this doesn't work)
+% TODO: include our methods outline picture here(this doesn't work)
 \begin{figure}
 	\centering
 	%\includegraphics[width=5.0in]{approach_outline.png}
@@ -150,7 +150,7 @@ Our baseline for this problem is a simple linear regression with L1 weight decay
 
 \subsection{Fine-tuning with Pre-trained BERT Model}
  We feed review text into pre-trained BERT and use its last hidden states as our representation of text. Using purely BERT processed text, we get loss down to 1.42. Combining features in baseline and BERT, we finally get shrink loss to 1.35, which beats all our previous models. We validate the effectiveness by selecting top 100 features, and this model gives a loss of 1.41.
-%TODO: add a plot here
+%TODO: add the plot of L1 coefficients vs accuracy here
 
 \subsection{Analysis and Adjustments}
 %TODO: I don't quite understand the stuff written in the presentation outline for this part
