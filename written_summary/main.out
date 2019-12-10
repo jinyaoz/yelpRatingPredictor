@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Background and related works}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{L1 Regularization}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{BERT}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{GloVe}{section.2}% 5
+\BOOKMARK [1][-]{section.3}{Methods}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Feature Significance Analysis}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.2}{Score Predictor}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Dataset}{}% 9
+\BOOKMARK [1][-]{section.5}{Experiments and Results}{}% 10
+\BOOKMARK [2][-]{subsection.5.1}{Baseline: L1 regularization}{section.5}% 11
+\BOOKMARK [2][-]{subsection.5.2}{Fine-tuning with Pre-trained BERT Model}{section.5}% 12
+\BOOKMARK [2][-]{subsection.5.3}{Analysis and Adjustments}{section.5}% 13
+\BOOKMARK [1][-]{section.6}{Conclusion and Future Work}{}% 14
+\BOOKMARK [2][-]{subsection.6.1}{Conclusion}{section.6}% 15
+\BOOKMARK [2][-]{subsection.6.2}{Reflections and Future Work}{section.6}% 16
+\BOOKMARK [2][-]{subsection.6.3}{Figures}{section.6}% 17
+\BOOKMARK [2][-]{subsection.6.4}{Tables}{section.6}% 18
